@@ -23,9 +23,9 @@ import (
 	"testing"
 	"time"
 
-	vkit "cloud.google.com/go/spanner/apiv1"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	vkit "storj.io/spanner-client/apiv1"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
+	. "storj.io/spanner-client/internal/testutil"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

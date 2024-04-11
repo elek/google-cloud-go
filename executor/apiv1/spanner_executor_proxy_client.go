@@ -20,7 +20,7 @@ import (
 	"context"
 	"math"
 
-	executorpb "cloud.google.com/go/spanner/executor/apiv1/executorpb"
+	executorpb "storj.io/spanner-client/executor/apiv1/executorpb"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"

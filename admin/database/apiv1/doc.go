@@ -70,7 +70,7 @@
 //
 //	req := &databasepb.CopyBackupRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#CopyBackupRequest.
+//		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#CopyBackupRequest.
 //	}
 //	op, err := c.CopyBackup(ctx, req)
 //	if err != nil {
@@ -97,7 +97,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package database // import "cloud.google.com/go/spanner/admin/database/apiv1"
+package database // import "storj.io/spanner-client/admin/database/apiv1"
 
 import (
 	"context"

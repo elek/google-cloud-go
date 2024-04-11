@@ -27,7 +27,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	"cloud.google.com/go/spanner/spansql"
+	"storj.io/spanner-client/spansql"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

@@ -1,4 +1,4 @@
-module cloud.google.com/go/spanner
+module storj.io/spanner-client
 
 go 1.19
 

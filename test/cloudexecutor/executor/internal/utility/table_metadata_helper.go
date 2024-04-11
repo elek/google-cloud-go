@@ -18,9 +18,9 @@ import (
 	"fmt"
 	"log"
 
-	"cloud.google.com/go/spanner"
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
-	"cloud.google.com/go/spanner/executor/apiv1/executorpb"
+	"storj.io/spanner-client"
+	"storj.io/spanner-client/apiv1/spannerpb"
+	"storj.io/spanner-client/executor/apiv1/executorpb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

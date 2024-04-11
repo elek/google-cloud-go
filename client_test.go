@@ -29,7 +29,7 @@ import (
 
 	"cloud.google.com/go/civil"
 	itestutil "cloud.google.com/go/internal/testutil"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/googleapis/gax-go/v2"
@@ -39,8 +39,8 @@ import (
 	"google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/status"
 
-	vkit "cloud.google.com/go/spanner/apiv1"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	vkit "storj.io/spanner-client/apiv1"
+	. "storj.io/spanner-client/internal/testutil"
 )
 
 func setupMockedTestServer(t *testing.T) (server *MockedSpannerInMemTestServer, client *Client, teardown func()) {

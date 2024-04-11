@@ -67,7 +67,7 @@
 //
 //	req := &instancepb.CreateInstanceRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#CreateInstanceRequest.
+//		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#CreateInstanceRequest.
 //	}
 //	op, err := c.CreateInstance(ctx, req)
 //	if err != nil {
@@ -94,7 +94,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package instance // import "cloud.google.com/go/spanner/admin/instance/apiv1"
+package instance // import "storj.io/spanner-client/admin/instance/apiv1"
 
 import (
 	"context"

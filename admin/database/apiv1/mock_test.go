@@ -29,7 +29,7 @@ import (
 
 	"cloud.google.com/go/iam/apiv1/iampb"
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
-	"cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
+	"storj.io/spanner-client/admin/database/apiv1/databasepb"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	emptypb "github.com/golang/protobuf/ptypes/empty"

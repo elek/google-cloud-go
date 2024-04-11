@@ -21,7 +21,7 @@ import (
 	"io"
 	"sort"
 
-	"cloud.google.com/go/spanner/spansql"
+	"storj.io/spanner-client/spansql"
 )
 
 /*

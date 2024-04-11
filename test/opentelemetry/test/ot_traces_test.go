@@ -25,8 +25,8 @@ import (
 	"testing"
 
 	"cloud.google.com/go/internal/trace"
-	"cloud.google.com/go/spanner"
-	stestutil "cloud.google.com/go/spanner/internal/testutil"
+	"storj.io/spanner-client"
+	stestutil "storj.io/spanner-client/internal/testutil"
 	"go.opentelemetry.io/otel/sdk/trace/tracetest"
 )
 
@@ -71,7 +71,7 @@ func TestSpannerTracesWithOpenTelemetry(t *testing.T) {
 	if len(spans) == 0 {
 		t.Fatal("No spans were exported")
 	}
-	spanName := "cloud.google.com/go/spanner.Query"
+	spanName := "storj.io/spanner-client.Query"
 	if !findSpan(spans, spanName) {
 		t.Errorf("Expected span %s not found", spanName)
 	}

@@ -26,9 +26,9 @@ import (
 	sync "sync"
 
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
-	databasepb "cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
-	instancepb "cloud.google.com/go/spanner/admin/instance/apiv1/instancepb"
-	spannerpb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	databasepb "storj.io/spanner-client/admin/database/apiv1/databasepb"
+	instancepb "storj.io/spanner-client/admin/instance/apiv1/instancepb"
+	spannerpb "storj.io/spanner-client/apiv1/spannerpb"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	status "google.golang.org/genproto/googleapis/rpc/status"
 	grpc "google.golang.org/grpc"

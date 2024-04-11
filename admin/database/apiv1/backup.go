@@ -21,7 +21,7 @@ import (
 	"regexp"
 	"time"
 
-	"cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
+	"storj.io/spanner-client/admin/database/apiv1/databasepb"
 	pbt "github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/googleapis/gax-go/v2"
 )

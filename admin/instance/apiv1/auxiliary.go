@@ -22,7 +22,7 @@ import (
 
 	"cloud.google.com/go/longrunning"
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
-	instancepb "cloud.google.com/go/spanner/admin/instance/apiv1/instancepb"
+	instancepb "storj.io/spanner-client/admin/instance/apiv1/instancepb"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/iterator"
 )

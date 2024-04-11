@@ -22,9 +22,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
-	"cloud.google.com/go/spanner/internal"
-	stestutil "cloud.google.com/go/spanner/internal/testutil"
+	"storj.io/spanner-client/apiv1/spannerpb"
+	"storj.io/spanner-client/internal"
+	stestutil "storj.io/spanner-client/internal/testutil"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"

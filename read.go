@@ -26,7 +26,7 @@ import (
 
 	"cloud.google.com/go/internal/protostruct"
 	"cloud.google.com/go/internal/trace"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	"github.com/golang/protobuf/proto"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	"github.com/googleapis/gax-go/v2"
@@ -79,7 +79,7 @@ func streamWithReplaceSessionFunc(
 	release func(error),
 ) *RowIterator {
 	ctx, cancel := context.WithCancel(ctx)
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.RowIterator")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.RowIterator")
 	return &RowIterator{
 		streamd:          newResumableStreamDecoder(ctx, logger, rpc, replaceSession),
 		rowd:             &partialResultSetDecoder{},

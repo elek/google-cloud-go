@@ -21,8 +21,8 @@ import (
 
 	iampb "cloud.google.com/go/iam/apiv1/iampb"
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
-	database "cloud.google.com/go/spanner/admin/database/apiv1"
-	databasepb "cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
+	database "storj.io/spanner-client/admin/database/apiv1"
+	databasepb "storj.io/spanner-client/admin/database/apiv1/databasepb"
 	"google.golang.org/api/iterator"
 )
 
@@ -75,7 +75,7 @@ func ExampleDatabaseAdminClient_CopyBackup() {
 
 	req := &databasepb.CopyBackupRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#CopyBackupRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#CopyBackupRequest.
 	}
 	op, err := c.CopyBackup(ctx, req)
 	if err != nil {
@@ -105,7 +105,7 @@ func ExampleDatabaseAdminClient_CreateBackup() {
 
 	req := &databasepb.CreateBackupRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#CreateBackupRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#CreateBackupRequest.
 	}
 	op, err := c.CreateBackup(ctx, req)
 	if err != nil {
@@ -135,7 +135,7 @@ func ExampleDatabaseAdminClient_CreateDatabase() {
 
 	req := &databasepb.CreateDatabaseRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#CreateDatabaseRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#CreateDatabaseRequest.
 	}
 	op, err := c.CreateDatabase(ctx, req)
 	if err != nil {
@@ -165,7 +165,7 @@ func ExampleDatabaseAdminClient_DeleteBackup() {
 
 	req := &databasepb.DeleteBackupRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#DeleteBackupRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#DeleteBackupRequest.
 	}
 	err = c.DeleteBackup(ctx, req)
 	if err != nil {
@@ -188,7 +188,7 @@ func ExampleDatabaseAdminClient_DropDatabase() {
 
 	req := &databasepb.DropDatabaseRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#DropDatabaseRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#DropDatabaseRequest.
 	}
 	err = c.DropDatabase(ctx, req)
 	if err != nil {
@@ -211,7 +211,7 @@ func ExampleDatabaseAdminClient_GetBackup() {
 
 	req := &databasepb.GetBackupRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#GetBackupRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#GetBackupRequest.
 	}
 	resp, err := c.GetBackup(ctx, req)
 	if err != nil {
@@ -236,7 +236,7 @@ func ExampleDatabaseAdminClient_GetDatabase() {
 
 	req := &databasepb.GetDatabaseRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#GetDatabaseRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#GetDatabaseRequest.
 	}
 	resp, err := c.GetDatabase(ctx, req)
 	if err != nil {
@@ -261,7 +261,7 @@ func ExampleDatabaseAdminClient_GetDatabaseDdl() {
 
 	req := &databasepb.GetDatabaseDdlRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#GetDatabaseDdlRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#GetDatabaseDdlRequest.
 	}
 	resp, err := c.GetDatabaseDdl(ctx, req)
 	if err != nil {
@@ -311,7 +311,7 @@ func ExampleDatabaseAdminClient_ListBackupOperations() {
 
 	req := &databasepb.ListBackupOperationsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#ListBackupOperationsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#ListBackupOperationsRequest.
 	}
 	it := c.ListBackupOperations(ctx, req)
 	for {
@@ -342,7 +342,7 @@ func ExampleDatabaseAdminClient_ListBackups() {
 
 	req := &databasepb.ListBackupsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#ListBackupsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#ListBackupsRequest.
 	}
 	it := c.ListBackups(ctx, req)
 	for {
@@ -373,7 +373,7 @@ func ExampleDatabaseAdminClient_ListDatabaseOperations() {
 
 	req := &databasepb.ListDatabaseOperationsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#ListDatabaseOperationsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#ListDatabaseOperationsRequest.
 	}
 	it := c.ListDatabaseOperations(ctx, req)
 	for {
@@ -404,7 +404,7 @@ func ExampleDatabaseAdminClient_ListDatabaseRoles() {
 
 	req := &databasepb.ListDatabaseRolesRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#ListDatabaseRolesRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#ListDatabaseRolesRequest.
 	}
 	it := c.ListDatabaseRoles(ctx, req)
 	for {
@@ -435,7 +435,7 @@ func ExampleDatabaseAdminClient_ListDatabases() {
 
 	req := &databasepb.ListDatabasesRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#ListDatabasesRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#ListDatabasesRequest.
 	}
 	it := c.ListDatabases(ctx, req)
 	for {
@@ -466,7 +466,7 @@ func ExampleDatabaseAdminClient_RestoreDatabase() {
 
 	req := &databasepb.RestoreDatabaseRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#RestoreDatabaseRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#RestoreDatabaseRequest.
 	}
 	op, err := c.RestoreDatabase(ctx, req)
 	if err != nil {
@@ -546,7 +546,7 @@ func ExampleDatabaseAdminClient_UpdateBackup() {
 
 	req := &databasepb.UpdateBackupRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#UpdateBackupRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#UpdateBackupRequest.
 	}
 	resp, err := c.UpdateBackup(ctx, req)
 	if err != nil {
@@ -571,7 +571,7 @@ func ExampleDatabaseAdminClient_UpdateDatabase() {
 
 	req := &databasepb.UpdateDatabaseRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#UpdateDatabaseRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#UpdateDatabaseRequest.
 	}
 	op, err := c.UpdateDatabase(ctx, req)
 	if err != nil {
@@ -601,7 +601,7 @@ func ExampleDatabaseAdminClient_UpdateDatabaseDdl() {
 
 	req := &databasepb.UpdateDatabaseDdlRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/database/apiv1/databasepb#UpdateDatabaseDdlRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/database/apiv1/databasepb#UpdateDatabaseDdlRequest.
 	}
 	op, err := c.UpdateDatabaseDdl(ctx, req)
 	if err != nil {

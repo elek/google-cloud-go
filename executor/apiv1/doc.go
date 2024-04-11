@@ -118,7 +118,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package executor // import "cloud.google.com/go/spanner/executor/apiv1"
+package executor // import "storj.io/spanner-client/executor/apiv1"
 
 import (
 	"context"

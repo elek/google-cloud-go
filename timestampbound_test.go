@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	pbd "github.com/golang/protobuf/ptypes/duration"
 	pbt "github.com/golang/protobuf/ptypes/timestamp"
 )

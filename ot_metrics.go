@@ -21,7 +21,7 @@ import (
 	"strings"
 	"sync"
 
-	"cloud.google.com/go/spanner/internal"
+	"storj.io/spanner-client/internal"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"

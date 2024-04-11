@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/trace"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/iterator"
@@ -32,7 +32,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	vkit "cloud.google.com/go/spanner/apiv1"
+	vkit "storj.io/spanner-client/apiv1"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 )
 
@@ -214,7 +214,7 @@ func (ro ReadOptions) merge(opts ReadOptions) ReadOptions {
 // ReadWithOptions returns a RowIterator for reading multiple rows from the
 // database. Pass a ReadOptions to modify the read operation.
 func (t *txReadOnly) ReadWithOptions(ctx context.Context, table string, keys KeySet, columns []string, opts *ReadOptions) (ri *RowIterator) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.Read")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.Read")
 	defer func() { trace.EndSpan(ctx, ri.err) }()
 	var (
 		sh  *sessionHandle
@@ -510,7 +510,7 @@ func (t *txReadOnly) AnalyzeQuery(ctx context.Context, statement Statement) (*sp
 }
 
 func (t *txReadOnly) query(ctx context.Context, statement Statement, options QueryOptions) (ri *RowIterator) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.Query")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.Query")
 	defer func() { trace.EndSpan(ctx, ri.err) }()
 	req, sh, err := t.prepareExecuteSQL(ctx, statement, options)
 	if err != nil {
@@ -1108,7 +1108,7 @@ func (t *ReadWriteTransaction) UpdateWithOptions(ctx context.Context, stmt State
 }
 
 func (t *ReadWriteTransaction) update(ctx context.Context, stmt Statement, opts QueryOptions) (rowCount int64, err error) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.Update")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.Update")
 	defer func() { trace.EndSpan(ctx, err) }()
 	req, sh, err := t.prepareExecuteSQL(ctx, stmt, opts)
 	if err != nil {
@@ -1180,7 +1180,7 @@ func (t *ReadWriteTransaction) BatchUpdateWithOptions(ctx context.Context, stmts
 }
 
 func (t *ReadWriteTransaction) batchUpdateWithOptions(ctx context.Context, stmts []Statement, opts QueryOptions) (_ []int64, err error) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.BatchUpdate")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.BatchUpdate")
 	defer func() { trace.EndSpan(ctx, err) }()
 
 	sh, ts, err := t.acquire(ctx)

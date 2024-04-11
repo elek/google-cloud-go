@@ -37,7 +37,7 @@ import (
 	structpb "github.com/golang/protobuf/ptypes/struct"
 
 	"cloud.google.com/go/civil"
-	"cloud.google.com/go/spanner/spansql"
+	"storj.io/spanner-client/spansql"
 )
 
 type database struct {

@@ -25,8 +25,8 @@ import (
 	"testing"
 	"time"
 
-	"cloud.google.com/go/spanner"
-	stestutil "cloud.google.com/go/spanner/internal/testutil"
+	"storj.io/spanner-client"
+	stestutil "storj.io/spanner-client/internal/testutil"
 )
 
 func setupMockedTestServerWithConfig(t *testing.T, config spanner.ClientConfig) (server *stestutil.MockedSpannerInMemTestServer, client *spanner.Client, teardown func()) {

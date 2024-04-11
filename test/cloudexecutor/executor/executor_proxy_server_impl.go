@@ -20,8 +20,8 @@ package executor
 import (
 	"context"
 
-	"cloud.google.com/go/spanner/executor/apiv1/executorpb"
-	"cloud.google.com/go/spanner/test/cloudexecutor/executor/internal/inputstream"
+	"storj.io/spanner-client/executor/apiv1/executorpb"
+	"storj.io/spanner-client/test/cloudexecutor/executor/internal/inputstream"
 	"google.golang.org/api/option"
 )
 

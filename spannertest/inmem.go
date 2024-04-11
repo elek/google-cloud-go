@@ -42,7 +42,7 @@ variable and use the regular spanner.NewClient:
 	...
 
 The same server also supports database admin operations for use with
-the cloud.google.com/go/spanner/admin/database/apiv1 package. This only
+the storj.io/spanner-client/admin/database/apiv1 package. This only
 simulates the existence of a single database; its name is ignored.
 */
 package spannertest
@@ -67,15 +67,15 @@ import (
 	"google.golang.org/grpc/status"
 
 	lropb "cloud.google.com/go/longrunning/autogen/longrunningpb"
-	adminpb "cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
+	adminpb "storj.io/spanner-client/admin/database/apiv1/databasepb"
+	"storj.io/spanner-client/apiv1/spannerpb"
 	anypb "github.com/golang/protobuf/ptypes/any"
 	emptypb "github.com/golang/protobuf/ptypes/empty"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	timestamppb "github.com/golang/protobuf/ptypes/timestamp"
 
 	"cloud.google.com/go/civil"
-	"cloud.google.com/go/spanner/spansql"
+	"storj.io/spanner-client/spansql"
 )
 
 // Server is an in-memory Cloud Spanner fake.

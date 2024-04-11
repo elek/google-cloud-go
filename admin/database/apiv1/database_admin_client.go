@@ -30,7 +30,7 @@ import (
 	"cloud.google.com/go/longrunning"
 	lroauto "cloud.google.com/go/longrunning/autogen"
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
-	databasepb "cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
+	databasepb "storj.io/spanner-client/admin/database/apiv1/databasepb"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"

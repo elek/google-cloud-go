@@ -27,7 +27,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/trace"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	"github.com/googleapis/gax-go/v2"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
@@ -40,8 +40,8 @@ import (
 	"google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/metadata"
 
-	vkit "cloud.google.com/go/spanner/apiv1"
-	"cloud.google.com/go/spanner/internal"
+	vkit "storj.io/spanner-client/apiv1"
+	"storj.io/spanner-client/internal"
 
 	// Install google-c2p resolver, which is required for direct path.
 	_ "google.golang.org/grpc/xds/googledirectpath"
@@ -246,7 +246,7 @@ func NewClientWithConfig(ctx context.Context, database string, config ClientConf
 		return nil, err
 	}
 
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.NewClient")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.NewClient")
 	defer func() { trace.EndSpan(ctx, err) }()
 
 	// Append emulator options if SPANNER_EMULATOR_HOST has been set.
@@ -588,10 +588,10 @@ func checkNestedTxn(ctx context.Context) error {
 // using a fixed limit on the number of attempts. ReadWriteTransaction will
 // retry as needed until that deadline is met.
 //
-// See https://godoc.org/cloud.google.com/go/spanner#ReadWriteTransaction for
+// See https://godoc.org/storj.io/spanner-client#ReadWriteTransaction for
 // more details.
 func (c *Client) ReadWriteTransaction(ctx context.Context, f func(context.Context, *ReadWriteTransaction) error) (commitTimestamp time.Time, err error) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.ReadWriteTransaction")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.ReadWriteTransaction")
 	defer func() { trace.EndSpan(ctx, err) }()
 	resp, err := c.rwTransaction(ctx, f, TransactionOptions{})
 	return resp.CommitTs, err
@@ -602,10 +602,10 @@ func (c *Client) ReadWriteTransaction(ctx context.Context, f func(context.Contex
 //
 // ReadWriteTransactionWithOptions is a configurable ReadWriteTransaction.
 //
-// See https://godoc.org/cloud.google.com/go/spanner#ReadWriteTransaction for
+// See https://godoc.org/storj.io/spanner-client#ReadWriteTransaction for
 // more details.
 func (c *Client) ReadWriteTransactionWithOptions(ctx context.Context, f func(context.Context, *ReadWriteTransaction) error, options TransactionOptions) (resp CommitResponse, err error) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.ReadWriteTransactionWithOptions")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.ReadWriteTransactionWithOptions")
 	defer func() { trace.EndSpan(ctx, err) }()
 	resp, err = c.rwTransaction(ctx, f, options)
 	return resp, err
@@ -734,7 +734,7 @@ func (c *Client) Apply(ctx context.Context, ms []*Mutation, opts ...ApplyOption)
 		opt(ao)
 	}
 
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.Apply")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.Apply")
 	defer func() { trace.EndSpan(ctx, err) }()
 
 	if !ao.atLeastOnce {
@@ -892,7 +892,7 @@ func (c *Client) BatchWrite(ctx context.Context, mgs []*MutationGroup) *BatchWri
 
 // BatchWriteWithOptions is same as BatchWrite. It accepts additional options to customize the request.
 func (c *Client) BatchWriteWithOptions(ctx context.Context, mgs []*MutationGroup, opts BatchWriteOptions) *BatchWriteResponseIterator {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.BatchWrite")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.BatchWrite")
 
 	var err error
 	defer func() {
@@ -952,7 +952,7 @@ func (c *Client) BatchWriteWithOptions(ctx context.Context, mgs []*MutationGroup
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.BatchWriteResponseIterator")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.BatchWriteResponseIterator")
 	return &BatchWriteResponseIterator{
 		ctx:            ctx,
 		rpc:            rpc,

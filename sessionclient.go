@@ -26,9 +26,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/trace"
-	vkit "cloud.google.com/go/spanner/apiv1"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
-	"cloud.google.com/go/spanner/internal"
+	vkit "storj.io/spanner-client/apiv1"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
+	"storj.io/spanner-client/internal"
 	"github.com/googleapis/gax-go/v2"
 	"go.opencensus.io/tag"
 	"google.golang.org/api/option"
@@ -243,7 +243,7 @@ func (sc *sessionClient) batchCreateSessions(createSessionCount int32, distribut
 func (sc *sessionClient) executeBatchCreateSessions(client *vkit.Client, createCount int32, labels map[string]string, md metadata.MD, consumer sessionConsumer) {
 	ctx, cancel := context.WithTimeout(context.Background(), sc.batchTimeout)
 	defer cancel()
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.BatchCreateSessions")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.BatchCreateSessions")
 	defer func() { trace.EndSpan(ctx, nil) }()
 	trace.TracePrintf(ctx, nil, "Creating a batch of %d sessions", createCount)
 	remainingCreateCount := createCount

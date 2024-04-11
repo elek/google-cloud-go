@@ -27,7 +27,7 @@ import (
 	"sync"
 	"time"
 
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
+	"storj.io/spanner-client/apiv1/spannerpb"
 	"github.com/golang/protobuf/ptypes"
 	emptypb "github.com/golang/protobuf/ptypes/empty"
 	structpb "github.com/golang/protobuf/ptypes/struct"

@@ -16,7 +16,7 @@
 
 package instance
 
-import "cloud.google.com/go/spanner/internal"
+import "storj.io/spanner-client/internal"
 
 func init() {
 	versionClient = internal.Version

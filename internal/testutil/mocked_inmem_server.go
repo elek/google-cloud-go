@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"testing"
 
-	"cloud.google.com/go/spanner/admin/instance/apiv1/instancepb"
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
+	"storj.io/spanner-client/admin/instance/apiv1/instancepb"
+	"storj.io/spanner-client/apiv1/spannerpb"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"

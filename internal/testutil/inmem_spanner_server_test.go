@@ -18,7 +18,7 @@ import (
 	"io"
 	"strconv"
 
-	. "cloud.google.com/go/spanner/internal/testutil"
+	. "storj.io/spanner-client/internal/testutil"
 
 	"context"
 	"flag"
@@ -29,11 +29,11 @@ import (
 	"strings"
 	"testing"
 
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
+	"storj.io/spanner-client/apiv1/spannerpb"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	"google.golang.org/grpc/codes"
 
-	apiv1 "cloud.google.com/go/spanner/apiv1"
+	apiv1 "storj.io/spanner-client/apiv1"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"

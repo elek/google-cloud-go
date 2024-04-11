@@ -25,8 +25,8 @@ import (
 	"testing"
 	"time"
 
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
+	. "storj.io/spanner-client/internal/testutil"
 	"google.golang.org/api/iterator"
 )
 

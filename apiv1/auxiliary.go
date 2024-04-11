@@ -17,7 +17,7 @@
 package spanner
 
 import (
-	spannerpb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	spannerpb "storj.io/spanner-client/apiv1/spannerpb"
 	"google.golang.org/api/iterator"
 )
 

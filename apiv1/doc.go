@@ -70,7 +70,7 @@
 //
 //	req := &spannerpb.BatchCreateSessionsRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/cloud.google.com/go/spanner/apiv1/spannerpb#BatchCreateSessionsRequest.
+//		// See https://pkg.go.dev/storj.io/spanner-client/apiv1/spannerpb#BatchCreateSessionsRequest.
 //	}
 //	resp, err := c.BatchCreateSessions(ctx, req)
 //	if err != nil {
@@ -92,7 +92,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package spanner // import "cloud.google.com/go/spanner/apiv1"
+package spanner // import "storj.io/spanner-client/apiv1"
 
 import (
 	"context"

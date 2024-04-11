@@ -20,8 +20,8 @@ import (
 	"context"
 
 	iampb "cloud.google.com/go/iam/apiv1/iampb"
-	instance "cloud.google.com/go/spanner/admin/instance/apiv1"
-	instancepb "cloud.google.com/go/spanner/admin/instance/apiv1/instancepb"
+	instance "storj.io/spanner-client/admin/instance/apiv1"
+	instancepb "storj.io/spanner-client/admin/instance/apiv1/instancepb"
 	"google.golang.org/api/iterator"
 )
 
@@ -74,7 +74,7 @@ func ExampleInstanceAdminClient_CreateInstance() {
 
 	req := &instancepb.CreateInstanceRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#CreateInstanceRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#CreateInstanceRequest.
 	}
 	op, err := c.CreateInstance(ctx, req)
 	if err != nil {
@@ -104,7 +104,7 @@ func ExampleInstanceAdminClient_CreateInstanceConfig() {
 
 	req := &instancepb.CreateInstanceConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#CreateInstanceConfigRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#CreateInstanceConfigRequest.
 	}
 	op, err := c.CreateInstanceConfig(ctx, req)
 	if err != nil {
@@ -134,7 +134,7 @@ func ExampleInstanceAdminClient_CreateInstancePartition() {
 
 	req := &instancepb.CreateInstancePartitionRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#CreateInstancePartitionRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#CreateInstancePartitionRequest.
 	}
 	op, err := c.CreateInstancePartition(ctx, req)
 	if err != nil {
@@ -164,7 +164,7 @@ func ExampleInstanceAdminClient_DeleteInstance() {
 
 	req := &instancepb.DeleteInstanceRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#DeleteInstanceRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#DeleteInstanceRequest.
 	}
 	err = c.DeleteInstance(ctx, req)
 	if err != nil {
@@ -187,7 +187,7 @@ func ExampleInstanceAdminClient_DeleteInstanceConfig() {
 
 	req := &instancepb.DeleteInstanceConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#DeleteInstanceConfigRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#DeleteInstanceConfigRequest.
 	}
 	err = c.DeleteInstanceConfig(ctx, req)
 	if err != nil {
@@ -210,7 +210,7 @@ func ExampleInstanceAdminClient_DeleteInstancePartition() {
 
 	req := &instancepb.DeleteInstancePartitionRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#DeleteInstancePartitionRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#DeleteInstancePartitionRequest.
 	}
 	err = c.DeleteInstancePartition(ctx, req)
 	if err != nil {
@@ -258,7 +258,7 @@ func ExampleInstanceAdminClient_GetInstance() {
 
 	req := &instancepb.GetInstanceRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#GetInstanceRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#GetInstanceRequest.
 	}
 	resp, err := c.GetInstance(ctx, req)
 	if err != nil {
@@ -283,7 +283,7 @@ func ExampleInstanceAdminClient_GetInstanceConfig() {
 
 	req := &instancepb.GetInstanceConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#GetInstanceConfigRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#GetInstanceConfigRequest.
 	}
 	resp, err := c.GetInstanceConfig(ctx, req)
 	if err != nil {
@@ -308,7 +308,7 @@ func ExampleInstanceAdminClient_GetInstancePartition() {
 
 	req := &instancepb.GetInstancePartitionRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#GetInstancePartitionRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#GetInstancePartitionRequest.
 	}
 	resp, err := c.GetInstancePartition(ctx, req)
 	if err != nil {
@@ -333,7 +333,7 @@ func ExampleInstanceAdminClient_ListInstanceConfigOperations() {
 
 	req := &instancepb.ListInstanceConfigOperationsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#ListInstanceConfigOperationsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#ListInstanceConfigOperationsRequest.
 	}
 	it := c.ListInstanceConfigOperations(ctx, req)
 	for {
@@ -364,7 +364,7 @@ func ExampleInstanceAdminClient_ListInstanceConfigs() {
 
 	req := &instancepb.ListInstanceConfigsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#ListInstanceConfigsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#ListInstanceConfigsRequest.
 	}
 	it := c.ListInstanceConfigs(ctx, req)
 	for {
@@ -395,7 +395,7 @@ func ExampleInstanceAdminClient_ListInstancePartitionOperations() {
 
 	req := &instancepb.ListInstancePartitionOperationsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#ListInstancePartitionOperationsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#ListInstancePartitionOperationsRequest.
 	}
 	it := c.ListInstancePartitionOperations(ctx, req)
 	for {
@@ -426,7 +426,7 @@ func ExampleInstanceAdminClient_ListInstancePartitions() {
 
 	req := &instancepb.ListInstancePartitionsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#ListInstancePartitionsRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#ListInstancePartitionsRequest.
 	}
 	it := c.ListInstancePartitions(ctx, req)
 	for {
@@ -457,7 +457,7 @@ func ExampleInstanceAdminClient_ListInstances() {
 
 	req := &instancepb.ListInstancesRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#ListInstancesRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#ListInstancesRequest.
 	}
 	it := c.ListInstances(ctx, req)
 	for {
@@ -538,7 +538,7 @@ func ExampleInstanceAdminClient_UpdateInstance() {
 
 	req := &instancepb.UpdateInstanceRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#UpdateInstanceRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#UpdateInstanceRequest.
 	}
 	op, err := c.UpdateInstance(ctx, req)
 	if err != nil {
@@ -568,7 +568,7 @@ func ExampleInstanceAdminClient_UpdateInstanceConfig() {
 
 	req := &instancepb.UpdateInstanceConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#UpdateInstanceConfigRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#UpdateInstanceConfigRequest.
 	}
 	op, err := c.UpdateInstanceConfig(ctx, req)
 	if err != nil {
@@ -598,7 +598,7 @@ func ExampleInstanceAdminClient_UpdateInstancePartition() {
 
 	req := &instancepb.UpdateInstancePartitionRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/cloud.google.com/go/spanner/admin/instance/apiv1/instancepb#UpdateInstancePartitionRequest.
+		// See https://pkg.go.dev/storj.io/spanner-client/admin/instance/apiv1/instancepb#UpdateInstancePartitionRequest.
 	}
 	op, err := c.UpdateInstancePartition(ctx, req)
 	if err != nil {

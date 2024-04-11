@@ -30,9 +30,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/trace"
-	vkit "cloud.google.com/go/spanner/apiv1"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
-	"cloud.google.com/go/spanner/internal"
+	vkit "storj.io/spanner-client/apiv1"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
+	"storj.io/spanner-client/internal"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
 	octrace "go.opencensus.io/trace"
@@ -282,7 +282,7 @@ func (s *session) ping() error {
 	defer cancel()
 
 	// Start parent span that doesn't record.
-	_, span := octrace.StartSpan(ctx, "cloud.google.com/go/spanner.ping", octrace.WithSampler(octrace.NeverSample()))
+	_, span := octrace.StartSpan(ctx, "storj.io/spanner-client.ping", octrace.WithSampler(octrace.NeverSample()))
 	defer span.End()
 
 	// s.getID is safe even when s is invalid.

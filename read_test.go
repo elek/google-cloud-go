@@ -25,9 +25,9 @@ import (
 	"testing"
 	"time"
 
-	vkit "cloud.google.com/go/spanner/apiv1"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	vkit "storj.io/spanner-client/apiv1"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
+	. "storj.io/spanner-client/internal/testutil"
 	"github.com/golang/protobuf/proto"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	structpb "github.com/golang/protobuf/ptypes/struct"

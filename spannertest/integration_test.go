@@ -34,17 +34,17 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	"cloud.google.com/go/spanner"
-	dbadmin "cloud.google.com/go/spanner/admin/database/apiv1"
-	v1 "cloud.google.com/go/spanner/apiv1"
+	"storj.io/spanner-client"
+	dbadmin "storj.io/spanner-client/admin/database/apiv1"
+	v1 "storj.io/spanner-client/apiv1"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	dbadminpb "cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
-	"cloud.google.com/go/spanner/apiv1/spannerpb"
+	dbadminpb "storj.io/spanner-client/admin/database/apiv1/databasepb"
+	"storj.io/spanner-client/apiv1/spannerpb"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
 

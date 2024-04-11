@@ -23,7 +23,7 @@ import (
 	"unicode"
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
-	"cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
+	"storj.io/spanner-client/admin/database/apiv1/databasepb"
 	"github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"

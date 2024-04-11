@@ -17,7 +17,7 @@ package testutil
 import (
 	"context"
 
-	"cloud.google.com/go/spanner/admin/instance/apiv1/instancepb"
+	"storj.io/spanner-client/admin/instance/apiv1/instancepb"
 	"github.com/golang/protobuf/proto"
 )
 

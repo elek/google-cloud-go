@@ -18,7 +18,7 @@ import (
 	"context"
 
 	"cloud.google.com/go/internal/trace"
-	sppb "cloud.google.com/go/spanner/apiv1/spannerpb"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	"github.com/googleapis/gax-go/v2"
 	"go.opencensus.io/tag"
 	"google.golang.org/grpc"
@@ -46,7 +46,7 @@ func (c *Client) PartitionedUpdateWithOptions(ctx context.Context, statement Sta
 }
 
 func (c *Client) partitionedUpdate(ctx context.Context, statement Statement, options QueryOptions) (count int64, err error) {
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/spanner.PartitionedUpdate")
+	ctx = trace.StartSpan(ctx, "storj.io/spanner-client.PartitionedUpdate")
 	defer func() { trace.EndSpan(ctx, err) }()
 	if err := checkNestedTxn(ctx); err != nil {
 		return 0, err
