@@ -31,11 +31,10 @@ import (
 
 	"cloud.google.com/go/civil"
 	"cloud.google.com/go/internal/fields"
-	sppb "storj.io/spanner-client/apiv1/spannerpb"
 	"github.com/golang/protobuf/proto"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
-	jsoniter "github.com/json-iterator/go"
 	"google.golang.org/grpc/codes"
+	sppb "storj.io/spanner-client/apiv1/spannerpb"
 )
 
 const (
@@ -113,8 +112,6 @@ var (
 	commitTimestamp = time.Unix(0, 0).In(time.FixedZone("CommitTimestamp placeholder", 0xDB))
 
 	jsonNullBytes = []byte("null")
-
-	jsonProvider = jsoniter.ConfigCompatibleWithStandardLibrary
 )
 
 // UseNumberWithJSONDecoderEncoder specifies whether Cloud Spanner JSON numbers are decoded
@@ -124,11 +121,7 @@ var (
 // NOTE 1: Calling this method affects the behavior of all clients created by this library, both existing and future instances.
 // NOTE 2: This method sets a global variable that is used by the client to encode/decode JSON numbers. Access to the global variable is not synchronized. You should only call this method when there are no goroutines encoding/decoding Cloud Spanner JSON values. It is recommended to only call this method during the initialization of your application, and preferably before you create any Cloud Spanner clients, and/or in tests when there are no queries being executed.
 func UseNumberWithJSONDecoderEncoder(useNumber bool) {
-	jsonProvider = jsoniter.Config{
-		EscapeHTML:  true,
-		SortMapKeys: true, // Sort map keys to ensure deterministic output, to be consistent with encoding.
-		UseNumber:   useNumber,
-	}.Froze()
+	panic("json support is disabled")
 }
 
 // Encoder is the interface implemented by a custom type that can be encoded to
@@ -288,26 +281,7 @@ func (n NullString) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements json.Unmarshaler.UnmarshalJSON for NullString.
 func (n *NullString) UnmarshalJSON(payload []byte) error {
-	if payload == nil {
-		return fmt.Errorf("payload should not be nil")
-	}
-	if bytes.Equal(payload, jsonNullBytes) {
-		n.StringVal = ""
-		n.Valid = false
-		return nil
-	}
-	var s *string
-	if err := jsonProvider.Unmarshal(payload, &s); err != nil {
-		return err
-	}
-	if s != nil {
-		n.StringVal = *s
-		n.Valid = true
-	} else {
-		n.StringVal = ""
-		n.Valid = false
-	}
-	return nil
+	panic("json support is disabled")
 }
 
 // Value implements the driver.Valuer interface.
@@ -863,14 +837,7 @@ func (n NullJSON) IsNull() bool {
 
 // String implements Stringer.String for NullJSON.
 func (n NullJSON) String() string {
-	if !n.Valid {
-		return nullString
-	}
-	b, err := jsonProvider.Marshal(n.Value)
-	if err != nil {
-		return fmt.Sprintf("error: %v", err)
-	}
-	return fmt.Sprintf("%v", string(b))
+	panic("json support is disabled")
 }
 
 // MarshalJSON implements json.Marshaler.MarshalJSON for NullJSON.
@@ -880,21 +847,7 @@ func (n NullJSON) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements json.Unmarshaler.UnmarshalJSON for NullJSON.
 func (n *NullJSON) UnmarshalJSON(payload []byte) error {
-	if payload == nil {
-		return fmt.Errorf("payload should not be nil")
-	}
-	if bytes.Equal(payload, jsonNullBytes) {
-		n.Valid = false
-		return nil
-	}
-	var v interface{}
-	err := jsonProvider.Unmarshal(payload, &v)
-	if err != nil {
-		return fmt.Errorf("payload cannot be converted to a struct: got %v, err: %w", string(payload), err)
-	}
-	n.Value = v
-	n.Valid = true
-	return nil
+	panic("json support is disabled")
 }
 
 // GormDataType is used by gorm to determine the default data type for fields with this type.
@@ -958,7 +911,7 @@ type PGJsonB struct {
 	Value interface{} // Val contains the value when it is non-NULL, and nil when NULL.
 	Valid bool        // Valid is true if PGJsonB is not NULL.
 	// This is here to support customer wrappers around PGJsonB type, this will help during getDecodableSpannerType
-	// to differentiate between PGJsonB and NullJSON types.
+	// to differentiate between PGJsonB and panic("json support is disabled") types.
 	_ bool
 }
 
@@ -969,14 +922,7 @@ func (n PGJsonB) IsNull() bool {
 
 // String implements Stringer.String for PGJsonB.
 func (n PGJsonB) String() string {
-	if !n.Valid {
-		return nullString
-	}
-	b, err := jsonProvider.Marshal(n.Value)
-	if err != nil {
-		return fmt.Sprintf("error: %v", err)
-	}
-	return fmt.Sprintf("%v", string(b))
+	panic("json support is disabled")
 }
 
 // MarshalJSON implements json.Marshaler.MarshalJSON for PGJsonB.
@@ -986,28 +932,11 @@ func (n PGJsonB) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements json.Unmarshaler.UnmarshalJSON for PGJsonB.
 func (n *PGJsonB) UnmarshalJSON(payload []byte) error {
-	if payload == nil {
-		return fmt.Errorf("payload should not be nil")
-	}
-	if bytes.Equal(payload, jsonNullBytes) {
-		n.Valid = false
-		return nil
-	}
-	var v interface{}
-	err := jsonProvider.Unmarshal(payload, &v)
-	if err != nil {
-		return fmt.Errorf("payload cannot be converted to a struct: got %v, err: %w", string(payload), err)
-	}
-	n.Value = v
-	n.Valid = true
-	return nil
+	panic("json support is disabled")
 }
 
 func nulljson(valid bool, v interface{}) ([]byte, error) {
-	if !valid {
-		return jsonNullBytes, nil
-	}
-	return jsonProvider.Marshal(v)
+	panic("json support is disabled")
 }
 
 // GenericColumnValue represents the generic encoded value and type of the
@@ -1688,58 +1617,9 @@ func decodeValue(v *proto3.Value, t *sppb.Type, ptr interface{}, opts ...DecodeO
 		}
 		*p = *y
 	case *NullJSON:
-		if p == nil {
-			return errNilDst(p)
-		}
-		if code == sppb.TypeCode_ARRAY {
-			if acode != sppb.TypeCode_JSON {
-				return errTypeMismatch(code, acode, ptr)
-			}
-			x, err := getListValue(v)
-			if err != nil {
-				return err
-			}
-			y, err := decodeNullJSONArrayToNullJSON(x)
-			if err != nil {
-				return err
-			}
-			*p = *y
-		} else {
-			if code != sppb.TypeCode_JSON {
-				return errTypeMismatch(code, acode, ptr)
-			}
-			if isNull {
-				*p = NullJSON{}
-				break
-			}
-			x := v.GetStringValue()
-			var y interface{}
-			err := jsonProvider.Unmarshal([]byte(x), &y)
-			if err != nil {
-				return err
-			}
-			*p = NullJSON{y, true}
-		}
+		panic("json support is disabled")
 	case *[]NullJSON:
-		if p == nil {
-			return errNilDst(p)
-		}
-		if acode != sppb.TypeCode_JSON {
-			return errTypeMismatch(code, acode, ptr)
-		}
-		if isNull {
-			*p = nil
-			break
-		}
-		x, err := getListValue(v)
-		if err != nil {
-			return err
-		}
-		y, err := decodeNullJSONArray(x)
-		if err != nil {
-			return err
-		}
-		*p = y
+		panic("json support is disabled")
 	case *NullNumeric:
 		if p == nil {
 			return errNilDst(p)
@@ -1861,23 +1741,7 @@ func decodeValue(v *proto3.Value, t *sppb.Type, ptr interface{}, opts ...DecodeO
 		}
 		*p = y
 	case *PGJsonB:
-		if p == nil {
-			return errNilDst(p)
-		}
-		if code != sppb.TypeCode_JSON || typeAnnotation != sppb.TypeAnnotationCode_PG_JSONB {
-			return errTypeMismatch(code, acode, ptr)
-		}
-		if isNull {
-			*p = PGJsonB{}
-			break
-		}
-		x := v.GetStringValue()
-		var y interface{}
-		err := jsonProvider.Unmarshal([]byte(x), &y)
-		if err != nil {
-			return err
-		}
-		*p = PGJsonB{Value: y, Valid: true}
+		panic("json support is disabled")
 	case *[]PGJsonB:
 		if p == nil {
 			return errNilDst(p)
@@ -2557,35 +2421,9 @@ func (dsc decodableSpannerType) decodeValueToCustomType(v *proto3.Value, t *sppb
 		}
 		result = &PGNumeric{v.GetStringValue(), true}
 	case spannerTypeNullJSON:
-		if code != sppb.TypeCode_JSON {
-			return errTypeMismatch(code, acode, ptr)
-		}
-		if isNull {
-			result = &NullJSON{}
-			break
-		}
-		x := v.GetStringValue()
-		var y interface{}
-		err := jsonProvider.Unmarshal([]byte(x), &y)
-		if err != nil {
-			return err
-		}
-		result = &NullJSON{y, true}
+		panic("json support is disabled")
 	case spannerTypePGJsonB:
-		if code != sppb.TypeCode_JSON || typeAnnotation != sppb.TypeAnnotationCode_PG_JSONB {
-			return errTypeMismatch(code, acode, ptr)
-		}
-		if isNull {
-			result = &PGJsonB{}
-			break
-		}
-		x := v.GetStringValue()
-		var y interface{}
-		err := jsonProvider.Unmarshal([]byte(x), &y)
-		if err != nil {
-			return err
-		}
-		result = &PGJsonB{Value: y, Valid: true}
+		panic("json support is disabled")
 	case spannerTypeNonNullTime, spannerTypeNullTime:
 		var nt NullTime
 		err := parseNullTime(v, &nt, code, isNull)
@@ -3259,24 +3097,7 @@ func decodePGJsonBArray(pb *proto3.ListValue) ([]PGJsonB, error) {
 
 // decodeNullJSONArray decodes proto3.ListValue pb into a NullJSON pointer.
 func decodeNullJSONArrayToNullJSON(pb *proto3.ListValue) (*NullJSON, error) {
-	if pb == nil {
-		return nil, errNilListValue("JSON")
-	}
-	strs := []string{}
-	for _, v := range pb.Values {
-		if _, ok := v.Kind.(*proto3.Value_NullValue); ok {
-			strs = append(strs, "null")
-		} else {
-			strs = append(strs, v.GetStringValue())
-		}
-	}
-	s := fmt.Sprintf("[%s]", strings.Join(strs, ","))
-	var y interface{}
-	err := jsonProvider.Unmarshal([]byte(s), &y)
-	if err != nil {
-		return nil, err
-	}
-	return &NullJSON{y, true}, nil
+	panic("json support is disabled")
 }
 
 // decodeNumericPointerArray decodes proto3.ListValue pb into a *big.Rat slice.
@@ -3928,14 +3749,7 @@ func encodeValue(v interface{}) (*proto3.Value, *sppb.Type, error) {
 		}
 		pt = listType(pgNumericType())
 	case NullJSON:
-		if v.Valid {
-			b, err := jsonProvider.Marshal(v.Value)
-			if err != nil {
-				return nil, nil, err
-			}
-			pb.Kind = stringKind(string(b))
-		}
-		return pb, jsonType(), nil
+		panic("json support is disabled")
 	case []NullJSON:
 		if v != nil {
 			pb, err = encodeArray(len(v), func(i int) interface{} { return v[i] })
@@ -3945,14 +3759,7 @@ func encodeValue(v interface{}) (*proto3.Value, *sppb.Type, error) {
 		}
 		pt = listType(jsonType())
 	case PGJsonB:
-		if v.Valid {
-			b, err := jsonProvider.Marshal(v.Value)
-			if err != nil {
-				return nil, nil, err
-			}
-			pb.Kind = stringKind(string(b))
-		}
-		return pb, pgJsonbType(), nil
+		panic("json support is disabled")
 	case []PGJsonB:
 		if v != nil {
 			pb, err = encodeArray(len(v), func(i int) interface{} { return v[i] })
