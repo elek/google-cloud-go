@@ -1,294 +1,357 @@
-// Copyright 2014 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+Copyright 2017 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 
 /*
-Package cloud is the root of the packages used to access Google Cloud
-Services. See https://pkg.go.dev/cloud.google.com/go for a full list
-of sub-modules.
+Package spanner provides a client for reading and writing to Cloud Spanner
+databases. See the packages under admin for clients that operate on databases
+and instances.
 
-# Client Options
+See https://cloud.google.com/spanner/docs/getting-started/go/ for an
+introduction to Cloud Spanner and additional help on using this API.
 
-All clients in sub-packages are configurable via client options. These options
-are described here: https://pkg.go.dev/google.golang.org/api/option.
+See https://godoc.org/cloud.google.com/go for authentication, timeouts,
+connection pooling and similar aspects of this package.
 
-# Endpoint Override
+# Creating a Client
 
-Endpoint configuration is used to specify the URL to which requests are
-sent. It is used for services that support or require regional endpoints, as
-well as for other use cases such as [testing against fake servers].
-
-For example, the Vertex AI service recommends that you configure the endpoint to
-the location with the features you want that is closest to your physical
-location or the location of your users. There is no global endpoint for Vertex
-AI. See [Vertex AI - Locations] for more details. The following example
-demonstrates configuring a Vertex AI client with a regional endpoint:
+To start working with this package, create a client that refers to the database
+of interest:
 
 	ctx := context.Background()
-	endpoint := "us-central1-aiplatform.googleapis.com:443"
-	client, err := aiplatform.NewDatasetClient(ctx, option.WithEndpoint(endpoint))
-
-# Authentication and Authorization
-
-All of the clients support authentication via [Google Application Default Credentials],
-or by providing a JSON key file for a Service Account. See examples below.
-
-Google Application Default Credentials (ADC) is the recommended way to authorize
-and authenticate clients. For information on how to create and obtain
-Application Default Credentials, see
-https://cloud.google.com/docs/authentication/production. If you have your
-environment configured correctly you will not need to pass any extra information
-to the client libraries. Here is an example of a client using ADC to
-authenticate:
-
-	client, err := secretmanager.NewClient(context.Background())
+	client, err := spanner.NewClient(ctx, "projects/P/instances/I/databases/D")
 	if err != nil {
-		// TODO: handle error.
+	    // TODO: Handle error.
 	}
-	_ = client // Use the client.
+	defer client.Close()
 
-You can use a file with credentials to authenticate and authorize, such as a
-JSON key file associated with a Google service account. Service Account keys can
-be created and downloaded from https://console.cloud.google.com/iam-admin/serviceaccounts.
-This example uses the Secret Manger client, but the same steps apply to the
-all other client libraries this package as well. Example:
+Remember to close the client after use to free up the sessions in the session
+pool.
 
-	client, err := secretmanager.NewClient(context.Background(),
-		option.WithCredentialsFile("/path/to/service-account-key.json"))
+To use an emulator with this library, you can set the SPANNER_EMULATOR_HOST
+environment variable to the address at which your emulator is running. This will
+send requests to that address instead of to Cloud Spanner. You can then create
+and use a client as usual:
+
+	// Set SPANNER_EMULATOR_HOST environment variable.
+	err := os.Setenv("SPANNER_EMULATOR_HOST", "localhost:9010")
 	if err != nil {
-		// TODO: handle error.
+	    // TODO: Handle error.
 	}
-	_ = client // Use the client.
-
-In some cases (for instance, you don't want to store secrets on disk), you can
-create credentials from in-memory JSON and use the WithCredentials option.
-This example uses the Secret Manager client, but the same steps apply to
-all other client libraries as well. Note that scopes can be
-found at https://developers.google.com/identity/protocols/oauth2/scopes, and
-are also provided in all auto-generated libraries: for example,
-cloud.google.com/go/secretmanager/apiv1 provides DefaultAuthScopes. Example:
-
-	ctx := context.Background()
-	// https://pkg.go.dev/golang.org/x/oauth2/google
-	creds, err := google.CredentialsFromJSON(ctx, []byte("JSON creds"), secretmanager.DefaultAuthScopes()...)
+	// Create client as usual.
+	client, err := spanner.NewClient(ctx, "projects/P/instances/I/databases/D")
 	if err != nil {
-		// TODO: handle error.
+	    // TODO: Handle error.
 	}
-	client, err := secretmanager.NewClient(ctx, option.WithCredentials(creds))
+
+# Simple Reads and Writes
+
+Two Client methods, Apply and Single, work well for simple reads and writes. As
+a quick introduction, here we write a new row to the database and read it back:
+
+	_, err := client.Apply(ctx, []*spanner.Mutation{
+	    spanner.Insert("Users",
+	        []string{"name", "email"},
+	        []interface{}{"alice", "a@example.com"})})
 	if err != nil {
-		// TODO: handle error.
+	    // TODO: Handle error.
 	}
-	_ = client // Use the client.
-
-# Timeouts and Cancellation
-
-By default, non-streaming methods, like Create or Get, will have a default
-deadline applied to the context provided at call time, unless a context deadline
-is already set. Streaming methods have no default deadline and will run
-indefinitely. To set timeouts or arrange for cancellation, use
-[context]. Transient errors will be retried when correctness allows.
-
-Here is an example of setting a timeout for an RPC using
-[context.WithTimeout]:
-
-	ctx := context.Background()
-	// Do not set a timeout on the context passed to NewClient: dialing happens
-	// asynchronously, and the context is used to refresh credentials in the
-	// background.
-	client, err := secretmanager.NewClient(ctx)
+	row, err := client.Single().ReadRow(ctx, "Users",
+	    spanner.Key{"alice"}, []string{"email"})
 	if err != nil {
-		// TODO: handle error.
-	}
-	// Time out if it takes more than 10 seconds to create a dataset.
-	tctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel() // Always call cancel.
-
-	req := &secretmanagerpb.DeleteSecretRequest{Name: "projects/project-id/secrets/name"}
-	if err := client.DeleteSecret(tctx, req); err != nil {
-		// TODO: handle error.
+	    // TODO: Handle error.
 	}
 
-Here is an example of setting a timeout for an RPC using
-[github.com/googleapis/gax-go/v2.WithTimeout]:
+All the methods used above are discussed in more detail below.
 
-	ctx := context.Background()
-	// Do not set a timeout on the context passed to NewClient: dialing happens
-	// asynchronously, and the context is used to refresh credentials in the
-	// background.
-	client, err := secretmanager.NewClient(ctx)
-	if err != nil {
-		// TODO: handle error.
+# Keys
+
+Every Cloud Spanner row has a unique key, composed of one or more columns.
+Construct keys with a literal of type Key:
+
+	key1 := spanner.Key{"alice"}
+
+# KeyRanges
+
+The keys of a Cloud Spanner table are ordered. You can specify ranges of keys
+using the KeyRange type:
+
+	kr1 := spanner.KeyRange{Start: key1, End: key2}
+
+By default, a KeyRange includes its start key but not its end key. Use
+the Kind field to specify other boundary conditions:
+
+	// include both keys
+	kr2 := spanner.KeyRange{Start: key1, End: key2, Kind: spanner.ClosedClosed}
+
+# KeySets
+
+A KeySet represents a set of keys. A single Key or KeyRange can act as a KeySet.
+Use the KeySets function to build the union of several KeySets:
+
+	ks1 := spanner.KeySets(key1, key2, kr1, kr2)
+
+AllKeys returns a KeySet that refers to all the keys in a table:
+
+	ks2 := spanner.AllKeys()
+
+# Transactions
+
+All Cloud Spanner reads and writes occur inside transactions. There are two
+types of transactions, read-only and read-write. Read-only transactions cannot
+change the database, do not acquire locks, and may access either the current
+database state or states in the past. Read-write transactions can read the
+database before writing to it, and always apply to the most recent database
+state.
+
+# Single Reads
+
+The simplest and fastest transaction is a ReadOnlyTransaction that supports a
+single read operation. Use Client.Single to create such a transaction. You can
+chain the call to Single with a call to a Read method.
+
+When you only want one row whose key you know, use ReadRow. Provide the table
+name, key, and the columns you want to read:
+
+	row, err := client.Single().ReadRow(ctx, "Accounts", spanner.Key{"alice"}, []string{"balance"})
+
+Read multiple rows with the Read method. It takes a table name, KeySet, and list
+of columns:
+
+	iter := client.Single().Read(ctx, "Accounts", keyset1, columns)
+
+Read returns a RowIterator. You can call the Do method on the iterator and pass
+a callback:
+
+	err := iter.Do(func(row *Row) error {
+	   // TODO: use row
+	   return nil
+	})
+
+RowIterator also follows the standard pattern for the Google
+Cloud Client Libraries:
+
+	defer iter.Stop()
+	for {
+	    row, err := iter.Next()
+	    if err == iterator.Done {
+	        break
+	    }
+	    if err != nil {
+	        // TODO: Handle error.
+	    }
+	    // TODO: use row
 	}
 
-	req := &secretmanagerpb.DeleteSecretRequest{Name: "projects/project-id/secrets/name"}
-	// Time out if it takes more than 10 seconds to create a dataset.
-	if err := client.DeleteSecret(tctx, req, gax.WithTimeout(10*time.Second)); err != nil {
-		// TODO: handle error.
+Always call Stop when you finish using an iterator this way, whether or not you
+iterate to the end. (Failing to call Stop could lead you to exhaust the
+database's session quota.)
+
+To read rows with an index, use ReadUsingIndex.
+
+# Statements
+
+The most general form of reading uses SQL statements. Construct a Statement
+with NewStatement, setting any parameters using the Statement's Params map:
+
+	stmt := spanner.NewStatement("SELECT First, Last FROM SINGERS WHERE Last >= @start")
+	stmt.Params["start"] = "Dylan"
+
+You can also construct a Statement directly with a struct literal, providing
+your own map of parameters.
+
+Use the Query method to run the statement and obtain an iterator:
+
+	iter := client.Single().Query(ctx, stmt)
+
+# Rows
+
+Once you have a Row, via an iterator or a call to ReadRow, you can extract
+column values in several ways. Pass in a pointer to a Go variable of the
+appropriate type when you extract a value.
+
+You can extract by column position or name:
+
+	err := row.Column(0, &name)
+	err = row.ColumnByName("balance", &balance)
+
+You can extract all the columns at once:
+
+	err = row.Columns(&name, &balance)
+
+Or you can define a Go struct that corresponds to your columns, and extract
+into that:
+
+	var s struct { Name string; Balance int64 }
+	err = row.ToStruct(&s)
+
+For Cloud Spanner columns that may contain NULL, use one of the NullXXX types,
+like NullString:
+
+	var ns spanner.NullString
+	if err := row.Column(0, &ns); err != nil {
+	    // TODO: Handle error.
+	}
+	if ns.Valid {
+	    fmt.Println(ns.StringVal)
+	} else {
+	    fmt.Println("column is NULL")
 	}
 
-Here is an example of how to arrange for an RPC to be canceled, use
-[context.WithCancel]:
+# Multiple Reads
 
-	ctx := context.Background()
-	// Do not cancel the context passed to NewClient: dialing happens asynchronously,
-	// and the context is used to refresh credentials in the background.
-	client, err := secretmanager.NewClient(ctx)
-	if err != nil {
-		// TODO: handle error.
-	}
-	cctx, cancel := context.WithCancel(ctx)
-	defer cancel() // Always call cancel.
+To perform more than one read in a transaction, use ReadOnlyTransaction:
 
-	// TODO: Make the cancel function available to whatever might want to cancel the
-	// call--perhaps a GUI button.
-	req := &secretmanagerpb.DeleteSecretRequest{Name: "projects/proj/secrets/name"}
-	if err := client.DeleteSecret(cctx, req); err != nil {
-		// TODO: handle error.
-	}
+	txn := client.ReadOnlyTransaction()
+	defer txn.Close()
+	iter := txn.Query(ctx, stmt1)
+	// ...
+	iter =  txn.Query(ctx, stmt2)
+	// ...
 
-Do not attempt to control the initial connection (dialing) of a service by
-setting a timeout on the context passed to NewClient. Dialing is non-blocking,
-so timeouts would be ineffective and would only interfere with credential
-refreshing, which uses the same context.
+You must call Close when you are done with the transaction.
 
-# Headers
+# Timestamps and Timestamp Bounds
 
-Regardless of which transport is used, request headers can be set in the same
-way using [`callctx.SetHeaders`][setheaders].
+Cloud Spanner read-only transactions conceptually perform all their reads at a
+single moment in time, called the transaction's read timestamp. Once a read has
+started, you can call ReadOnlyTransaction's Timestamp method to obtain the read
+timestamp.
 
-Here is a generic example:
+By default, a transaction will pick the most recent time (a time where all
+previously committed transactions are visible) for its reads. This provides the
+freshest data, but may involve some delay. You can often get a quicker response
+if you are willing to tolerate "stale" data. You can control the read timestamp
+selected by a transaction by calling the WithTimestampBound method on the
+transaction before using it. For example, to perform a query on data that is at
+most one minute stale, use
 
-	// Set the header "key" to "value".
-	ctx := callctx.SetHeaders(context.Background(), "key", "value")
+	client.Single().
+	    WithTimestampBound(spanner.MaxStaleness(1*time.Minute)).
+	    Query(ctx, stmt)
 
-	// Then use ctx in a subsequent request.
-	response, err := client.GetSecret(ctx, request)
+See the documentation of TimestampBound for more details.
 
-## Google-reserved headers
+# Mutations
 
-There are a some header keys that Google reserves for internal use that must
-not be ovewritten. The following header keys are broadly considered reserved
-and should not be conveyed by client library users unless instructed to do so:
+To write values to a Cloud Spanner database, construct a Mutation. The spanner
+package has functions for inserting, updating and deleting rows. Except for the
+Delete methods, which take a Key or KeyRange, each mutation-building function
+comes in three varieties.
 
-* `x-goog-api-client`
-* `x-goog-request-params`
+One takes lists of columns and values along with the table name:
 
-Be sure to check the individual package documentation for other service-specific
-reserved headers. For example, Storage supports a specific auditing header that
-is mentioned in that [module's documentation][storagedocs].
+	m1 := spanner.Insert("Users",
+	    []string{"name", "email"},
+	    []interface{}{"alice", "a@example.com"})
 
-## Google Cloud system parameters
+One takes a map from column names to values:
 
-Google Cloud services respect [system parameters][system parameters] that can be
-used to augment request and/or response behavior. For the most part, they are
-not needed when using one of the enclosed client libraries. However, those that
-may be necessary are made available via the [`callctx`][callctx] package. If not
-present there, consider opening an issue on that repo to request a new constant.
+	m2 := spanner.InsertMap("Users", map[string]interface{}{
+	    "name":  "alice",
+	    "email": "a@example.com",
+	})
 
-# Connection Pooling
+And the third accepts a struct value, and determines the columns from the
+struct field names:
 
-Connection pooling differs in clients based on their transport. Cloud
-clients either rely on HTTP or gRPC transports to communicate
-with Google Cloud.
+	type User struct { Name, Email string }
+	u := User{Name: "alice", Email: "a@example.com"}
+	m3, err := spanner.InsertStruct("Users", u)
 
-Cloud clients that use HTTP rely on the underlying HTTP transport to cache
-connections for later re-use. These are cached to the http.MaxIdleConns
-and http.MaxIdleConnsPerHost settings in http.DefaultTransport by default.
+# Writes
 
-For gRPC clients, connection pooling is configurable. Users of Cloud Client
-Libraries may specify option.WithGRPCConnectionPool(n) as a client option to
-NewClient calls. This configures the underlying gRPC connections to be pooled
-and accessed in a round robin fashion.
+To apply a list of mutations to the database, use Apply:
 
-# Using the Libraries in Container environments(Docker)
+	_, err := client.Apply(ctx, []*spanner.Mutation{m1, m2, m3})
 
-Minimal container images like Alpine lack CA certificates. This causes RPCs to
-appear to hang, because gRPC retries indefinitely. See
-https://github.com/googleapis/google-cloud-go/issues/928 for more information.
+If you need to read before writing in a single transaction, use a
+ReadWriteTransaction. ReadWriteTransactions may be aborted automatically by the
+backend and need to be retried. You pass in a function to ReadWriteTransaction,
+and the client will handle the retries automatically. Use the transaction's
+BufferWrite method to buffer mutations, which will all be executed at the end
+of the transaction:
 
-# Debugging
+	_, err := client.ReadWriteTransaction(ctx, func(ctx context.Context, txn *spanner.ReadWriteTransaction) error {
+	    var balance int64
+	    row, err := txn.ReadRow(ctx, "Accounts", spanner.Key{"alice"}, []string{"balance"})
+	    if err != nil {
+	        // The transaction function will be called again if the error code
+	        // of this error is Aborted. The backend may automatically abort
+	        // any read/write transaction if it detects a deadlock or other
+	        // problems.
+	        return err
+	    }
+	    if err := row.Column(0, &balance); err != nil {
+	        return err
+	    }
 
-For tips on how to write tests against code that calls into our libraries check
-out our [Debugging Guide].
+	    if balance <= 10 {
+	        return errors.New("insufficient funds in account")
+	    }
+	    balance -= 10
+	    m := spanner.Update("Accounts", []string{"user", "balance"}, []interface{}{"alice", balance})
+	    // The buffered mutation will be committed.  If the commit
+	    // fails with an Aborted error, this function will be called
+	    // again.
+	    return txn.BufferWrite([]*spanner.Mutation{m})
+	})
 
-# Testing
+# Structs
 
-For tips on how to write tests against code that calls into our libraries check
-out our [Testing Guide].
+Cloud Spanner STRUCT (aka STRUCT) values
+(https://cloud.google.com/spanner/docs/data-types#struct-type) can be
+represented by a Go struct value.
 
-# Inspecting errors
+A proto StructType is built from the field types and field tag information of
+the Go struct. If a field in the struct type definition has a
+"spanner:<field_name>" tag, then the value of the "spanner" key in the tag is
+used as the name for that field in the built StructType, otherwise the field
+name in the struct definition is used. To specify a field with an empty field
+name in a Cloud Spanner STRUCT type, use the `spanner:""` tag annotation against
+the corresponding field in the Go struct's type definition.
 
-Most of the errors returned by the generated clients are wrapped in an
-[github.com/googleapis/gax-go/v2/apierror.APIError] and can be further unwrapped
-into a [google.golang.org/grpc/status.Status] or
-[google.golang.org/api/googleapi.Error] depending on the transport used to make
-the call (gRPC or REST). Converting your errors to these types can be a useful
-way to get more information about what went wrong while debugging.
+A STRUCT value can contain STRUCT-typed and Array-of-STRUCT typed fields and
+these can be specified using named struct-typed and []struct-typed fields inside
+a Go struct. However, embedded struct fields are not allowed. Unexported struct
+fields are ignored.
 
-APIError gives access to specific details in the error. The transport-specific
-errors can still be unwrapped using the APIError.
+NULL STRUCT values in Cloud Spanner are typed. A nil pointer to a Go struct
+value can be used to specify a NULL STRUCT value of the corresponding
+StructType.  Nil and empty slices of a Go STRUCT type can be used to specify
+NULL and empty array values respectively of the corresponding StructType. A
+slice of pointers to a Go struct type can be used to specify an array of
+NULL-able STRUCT values.
 
-	if err != nil {
-	   var ae *apierror.APIError
-	   if errors.As(err, &ae) {
-	      log.Println(ae.Reason())
-	      log.Println(ae.Details().Help.GetLinks())
-	   }
-	}
+# DML and Partitioned DML
 
-If the gRPC transport was used, the [google.golang.org/grpc/status.Status] can
-still be parsed using the [google.golang.org/grpc/status.FromError] function.
+Spanner supports DML statements like INSERT, UPDATE and DELETE. Use
+ReadWriteTransaction.Update to run DML statements. It returns the number of rows
+affected. (You can call use ReadWriteTransaction.Query with a DML statement. The
+first call to Next on the resulting RowIterator will return iterator.Done, and
+the RowCount field of the iterator will hold the number of affected rows.)
 
-	if err != nil {
-	   if s, ok := status.FromError(err); ok {
-	      log.Println(s.Message())
-	      for _, d := range s.Proto().Details {
-	         log.Println(d)
-	      }
-	   }
-	}
+For large databases, it may be more efficient to partition the DML statement.
+Use client.PartitionedUpdate to run a DML statement in this way. Not all DML
+statements can be partitioned.
 
-# Client Stability
+# Tracing
 
-Semver is used to communicate stability of the sub-modules of this package.
-Note, some stable sub-modules do contain packages, and sometimes features, that
-are considered unstable. If something is unstable it will be explicitly labeled
-as such. Example of package does in an unstable package:
-
-	NOTE: This package is in beta. It is not stable, and may be subject to changes.
-
-Clients that contain alpha and beta in their import path may change or go away
-without notice.
-
-Clients marked stable will maintain compatibility with future versions for as
-long as we can reasonably sustain. Incompatible changes might be made in some
-situations, including:
-
-  - Security bugs may prompt backwards-incompatible changes.
-  - Situations in which components are no longer feasible to maintain without
-    making breaking changes, including removal.
-  - Parts of the client surface may be outright unstable and subject to change.
-    These parts of the surface will be labeled with the note, "It is EXPERIMENTAL
-    and subject to change or removal without notice."
-
-[testing against fake servers]: https://github.com/googleapis/google-cloud-go/blob/main/testing.md#testing-grpc-services-using-fakes
-[Vertex AI - Locations]: https://cloud.google.com/vertex-ai/docs/general/locations
-[Google Application Default Credentials]: https://cloud.google.com/docs/authentication/external/set-up-adc
-[Testing Guide]: https://github.com/googleapis/google-cloud-go/blob/main/testing.md
-[Debugging Guide]: https://github.com/googleapis/google-cloud-go/blob/main/debug.md
-[callctx]: https://pkg.go.dev/github.com/googleapis/gax-go/v2/callctx#pkg-constants
-[setheaders]: https://pkg.go.dev/github.com/googleapis/gax-go/v2/callctx#SetHeaders
-[storagedocs]: https://pkg.go.dev/cloud.google.com/go/storage#hdr-Sending_Custom_Headers
-[system parameters]: https://cloud.google.com/apis/docs/system-parameters
+This client has been instrumented to use OpenCensus tracing
+(http://opencensus.io). To enable tracing, see "Enabling Tracing for a Program"
+at https://godoc.org/go.opencensus.io/trace. OpenCensus tracing requires Go 1.8
+or higher.
 */
-package cloud // import "cloud.google.com/go"
+package spanner // import "cloud.google.com/go/spanner"
